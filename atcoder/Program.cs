@@ -17,6 +17,8 @@ namespace atcoder
 
         public T Min<T>(params T[] a)
         {
+            if (a.Length == 0) return default(T);
+
             T min = a[0];
             for (int i = 1; i < a.Length; i++)
             {
@@ -27,6 +29,8 @@ namespace atcoder
 
         public T Max<T>(params T[] a)
         {
+            if (a.Length == 0) return default(T);
+
             T max = a[0];
             for (int i = 1; i < a.Length; i++)
             {
@@ -37,7 +41,6 @@ namespace atcoder
 
         public void Solve(ConsoleInput input)
         {
-            
 
 
             //Solve(input);
