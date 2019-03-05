@@ -12,45 +12,126 @@ namespace atcoder
     {
         static void Main(string[] args)
         {
-            new Program().Solve(new ConsoleInput(In));
-        }
-
-        public T Min<T>(params T[] a)
-        {
-            if (a.Length == 0) return default(T);
-
-            T min = a[0];
-            for (int i = 1; i < a.Length; i++)
+            if (args.Length > 0 && args[0] == "Debug")
             {
-                if ((dynamic)min > (dynamic)a[i]) min = a[i];
+                while (true)
+                    new Program().Solve(new ConsoleInput(In));
             }
-            return min;
-        }
-
-        public T Max<T>(params T[] a)
-        {
-            if (a.Length == 0) return default(T);
-
-            T max = a[0];
-            for (int i = 1; i < a.Length; i++)
-            {
-                if ((dynamic)max < (dynamic)a[i]) max = a[i];
-            }
-            return max;
+            else new Program().Solve(new ConsoleInput(In));
         }
 
         public void Solve(ConsoleInput input)
         {
 
-
-            //Solve(input);
         }
     }
 
-    public class ConsoleInput
+    class Math
+    {
+        public static int Min(params int[] a)
+        {
+            if (a.Length == 0) return 0;
+
+            var min = a[0];
+            for (int i = 1; i < a.Length; i++)
+            {
+                if (min > a[i]) min = a[i];
+            }
+            return min;
+        }
+
+        public static int Max(params int[] a)
+        {
+            if (a.Length == 0) return 0;
+
+            int max = a[0];
+            for (int i = 1; i < a.Length; i++)
+            {
+                if (max < a[i]) max = a[i];
+            }
+            return max;
+        }
+
+        public static int Lcm(int a, int b)
+        {
+            return a * b / Gcd(a, b);
+        }
+
+        public static int Gcd(int a, int b)
+        {
+            if (a < b)
+                return Gcd(b, a);
+            while (b != 0)
+            {
+                var remainder = a % b;
+                a = b;
+                b = remainder;
+            }
+            return a;
+        }
+    }
+
+    class UnionFind
+    {
+        private int[] parent;
+        private int[] rank;
+        private long[] size;
+
+        public UnionFind(int count)
+        {
+            parent = new int[count];
+            rank = new int[count];
+            size = new long[count];
+            for (var i = 0; i < count; i++)
+            {
+                parent[i] = i;
+                rank[i] = 0;
+                size[i] = 1;
+            }
+        }
+
+        public int Root(int x)
+        {
+            if (parent[x] != x)
+            {
+                parent[x] = Root(parent[x]);
+            }
+            return parent[x];
+        }
+
+        public void Unite(int a, int b)
+        {
+            var ra = Root(a);
+            var rb = Root(b);
+
+            if (Size(ra) < Size(rb))
+            {
+                parent[ra] = rb;
+                size[rb] += size[ra];
+            }
+            else
+            {
+                parent[rb] = ra;
+                size[ra] += size[rb];
+            }
+            if (rank[ra] == rank[rb]) rank[ra]++;
+        }
+
+        public bool Same(int a, int b)
+        {
+            return Root(a) == Root(b);
+        }
+
+        public long Size(int x)
+        {
+            return size[Root(x)];
+        }
+    }
+
+    class ConsoleInput
     {
         private readonly System.IO.TextReader _stream;
-        private readonly char _separator = ' ';
+        private readonly char _separator;
         private Queue<string> inputStream;
         public ConsoleInput(System.IO.TextReader stream, char separator = ' ')
         {
