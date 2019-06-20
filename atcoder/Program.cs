@@ -23,6 +23,7 @@ namespace atcoder
         public void Solve(ConsoleInput input)
         {
 
+
         }
     }
 
